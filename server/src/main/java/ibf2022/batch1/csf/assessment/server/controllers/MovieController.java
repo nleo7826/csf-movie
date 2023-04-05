@@ -65,19 +65,6 @@ public class MovieController {
             .body(result.toString());
     }
 
-    @PostMapping(path="/{title}")
-    public ResponseEntity<String> saveComment(
-        @RequestBody Comment comment, @PathVariable(required=true) String title) {
-        logger.info("save comment > : " + title);
-        Comment c= new Comment();
-        c.setComment(comment.getComment());
-        c.setCharId(title);
-        Comment r = this.movieService.insertComment(c);
-        return ResponseEntity
-            .status(HttpStatus.OK)
-            .contentType(MediaType.APPLICATION_JSON)
-            .body(r.toJSON().toString());
-    }
 
     @GetMapping(path="/comments/{title}")
     public ResponseEntity<String> getComments(@PathVariable(required=true) String title) {
