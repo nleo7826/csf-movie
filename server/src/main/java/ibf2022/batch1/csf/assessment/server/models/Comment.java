@@ -6,15 +6,10 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
 public class Comment {
-    private String movieId;
+    private String title;
     private String comment;
 
-    public String getMovieId() {
-        return movieId;
-    }
-    public void setMovieId(String movieId) {
-        this.movieId = movieId;
-    }
+
     public String getComment() {
         return comment;
     }
@@ -22,9 +17,17 @@ public class Comment {
         this.comment = comment;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public static Comment create(Document d) {
         Comment c = new Comment();
-        c.setCharId(d.getObjectId("movieId").toString());
+        c.setTitle(d.getObjectName("title").toString());
         c.setComment(d.getString("comment"));
         return c;
     }
@@ -32,7 +35,7 @@ public class Comment {
     public JsonObject toJSON() {
 
         return Json.createObjectBuilder()
-                .add("movieId", getCharId())
+                .add("title", getTitle())
                 .add("comment", getComment())
                 .build();
     }

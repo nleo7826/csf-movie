@@ -34,7 +34,7 @@ export class MovieReviewService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
     const body=JSON.stringify(c);
     console.log("save comment !");
-    return lastValueFrom(this.httpClient.post<Comment>(this.API_URI+"/" + c.id, body, {headers: headers}));
+    return lastValueFrom(this.httpClient.post<Comment>(this.API_URI+"/" + c.title, body, {headers: headers}));
   }
 
 //   getCharComments(charId: string): Promise<Comment[]>{

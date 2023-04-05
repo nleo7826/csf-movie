@@ -51,12 +51,9 @@ export class MovieReviewListComponent {
 
   async toComment(){
     console.log(this.currentIndex);
-    if(this.currentIndex > 0){
-      this.currentIndex = this.currentIndex + 20;
-      const l = await this.mrSvc
-            .getReviews(this.movieName);
-      this.movies = l;
-    }
+    const l = await this.mrSvc
+          .getReviews(this.movieName);
+    this.movies = l;
     this.router.navigate(['comment'])
   }
 

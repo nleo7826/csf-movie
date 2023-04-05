@@ -16,7 +16,6 @@ export class PostCommentComponent {
   queryParams$! :  Subscription;
   movieParam!: any;
   movieName! : string;
-  movieId!: string;
   movies! : Review[];
 
   constructor(private activatedRoute: ActivatedRoute,  private formBuilder: FormBuilder,
@@ -28,11 +27,7 @@ export class PostCommentComponent {
     this.form = this.createForm();
     this.queryParams$ = this.activatedRoute.queryParams.subscribe(
       (queryParams) => {
-        this.movieParam = queryParams['movieParam'].split('|');
-        console.log(this.movieParam[0]);
-        console.log(this.movieParam[1]);
-        this.movieName = this.movieParam[0];
-        this.movieId = this.movieParam[1];
+        this.movieName = queryParams['movieName'];
       }
     );
 
@@ -42,7 +37,7 @@ export class PostCommentComponent {
     const commentFormVal = this.form?.value['comment'];
     const c = {} as Comment;
     c.comment = commentFormVal;
-    c.id = this.movieId;
+    c.title = this.movieName;
 
     this.mrSvc.saveComment(c);
     this.previous();

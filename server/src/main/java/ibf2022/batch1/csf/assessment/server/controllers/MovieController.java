@@ -1,4 +1,5 @@
 package ibf2022.batch1.csf.assessment.server.controllers;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -23,15 +24,11 @@ import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
-import csf.app.server.services.CharacterService;
+
 import ibf2022.batch1.csf.assessment.server.services.MovieService;
-import csf.app.server.model.Comment;
-import csf.app.server.model.MarvelCharacter;
-
-
 
 @RestController
-@RequestMapping(path="/api", consumes = MediaType.APPLICATION_JSON_VALUE, 
+@RequestMapping(path="/api/list", consumes = MediaType.APPLICATION_JSON_VALUE, 
         produces = MediaType.APPLICATION_JSON_VALUE)
 public class MovieController {
 
@@ -39,10 +36,60 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-    @GetMapping(path="/search")
-    public ResponseEntity<List<Movie>> searchMovies(@RequestParam("query") String query) {
-        List<Movie> movies = movieService.searchMovies(query);
-        return new ResponseEntity<>(movies, HttpStatus.OK);
+    @GetMapping(path="/{title}")
+    public ResponseEntity<String> getMovies(
+        @RequestParam(required=true) String title) {
+
+    JsonArray result = null;
+    Optional<List<Review>> or = this.movieService.getMovieReview(title);
+    List<Review> results = or.get(); 
+    JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+    for (Review r : results)
+        arrBuilder.add(r.toJSON());
+    result = arrBuilder.build();
+    return ResponseEntity
+        .status(HttpStatus.OK)
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(result.toString());
+}
+
+    @GetMapping(path="/{title}")
+    public ResponseEntity<String> getMovieDetails(
+        @PathVariable(required=true) String title) throws IOException {
+        JsonObjectBuilder ocjBuilder = Json.createObjectBuilder();
+        ocjBuilder.add("details" , c.toJSON());
+        JsonObject result = ocjBuilder.build();
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(result.toString());
     }
 
+    @PostMapping(path="/{title}")
+    public ResponseEntity<String> saveComment(
+        @RequestBody Comment comment, @PathVariable(required=true) String title) {
+        logger.info("save comment > : " + title);
+        Comment c= new Comment();
+        c.setComment(comment.getComment());
+        c.setCharId(title);
+        Comment r = this.movieService.insertComment(c);
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(r.toJSON().toString());
+    }
+
+    @GetMapping(path="/comments/{title}")
+    public ResponseEntity<String> getComments(@PathVariable(required=true) String title) {
+        List<Comment> aa = this.movieService.getAllComments(title);
+        JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+        for (Comment c : aa)
+            arrBuilder.add(c.toJSON());
+        JsonArray result = arrBuilder.build();
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(result.toString());
+    }
 }
+
