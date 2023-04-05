@@ -1,0 +1,17 @@
+<div>
+    <span>Search Result</span>
+    <button mat-raised-button type="button" (click)="previous()">Previous</button>
+    &nbsp;>
+</div>
+<mat-nav-list>
+    <a mat-list-item *ngFor="let m of movies" [routerLink]="['/list', m.title]">
+        {{m.title}} {{m.rating}}
+        &nbsp;
+        {{m.headline}}
+        &nbsp;
+        {{m.summary_short}}
+        &nbsp;
+        {{m.comment_count}}
+    </a>
+    <button mat-raised-button type="button" (click)="toComment()">Comment</button>
+</mat-nav-list>
