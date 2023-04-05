@@ -24,22 +24,20 @@ public class MovieService {
 	// DO NOT CHANGE THE METHOD'S SIGNATURE
     @Autowired
     private MovieRepository movieRepo;
+
  
-    public Optional<List<Review>> getReview(String title) {
-        return movieRepo.getReviews(title);
-    }
+    public List<Comment> getAllComments(String title) {
+        public Optional<List<Review>> getReview(String title) {
+            return movieRepo.getReviews(title);
+        }
 
-    public Review getMovieReview(String title) throws IOException {
-        Optional<Review> r = movieRepo.getMovieReview(title);
-        return r.get();
-    }
+        public Comment insertComment(Comment r){
+            return movieRepo.insertComment(r);
+        }
 
-    public Comment insertComment(Comment r){
-        return movieRepo.insertComment(r);
+        public List<Review> searchReviews(String query) {
+            return movieRepo.searchReviews(query);
+        }
     }
-
-    public List<Review> searchReviews(String query) {
-        return movieRepo.searchReviews(query);
-	}
 }
 
